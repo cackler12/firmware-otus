@@ -86,7 +86,8 @@ uint32_t GPSUpdateScheduling::msUntilNextSearch()
     uint32_t now = Time::getMillis();
 
     // Target interval (seconds), between GPS updates
-    uint32_t updateInterval = Default::getConfiguredOrDefaultMs(config.position.gps_update_interval, default_gps_update_interval);
+    // Hardcoded to 1 second update rate for GPS
+    uint32_t updateInterval = Default::getConfiguredOrDefaultMs(1, default_gps_update_interval);
 
     // After a failed search, back off: indoors / no-sky environments will keep failing,
     // so wake at most once per broadcast interval rather than once per gps_update_interval.
@@ -95,7 +96,7 @@ uint32_t GPSUpdateScheduling::msUntilNextSearch()
     if (consecutiveFailures > 0) {
         constexpr uint32_t failureRetryCapMs = 60UL * 60UL * 1000UL; // 1 hour cap
         uint32_t failureSleepMs =
-            Default::getConfiguredOrDefaultMs(config.position.position_broadcast_secs, default_broadcast_interval_secs);
+            Default::getConfiguredOrDefaultMs(15, default_broadcast_interval_secs);
         if (failureSleepMs > failureRetryCapMs)
             failureSleepMs = failureRetryCapMs;
         if (updateInterval < failureSleepMs)
@@ -149,7 +150,7 @@ bool GPSUpdateScheduling::searchedTooLong()
         return true;
 
     uint32_t minimumOrConfiguredSecs =
-        Default::getConfiguredOrMinimumValue(config.position.position_broadcast_secs, default_broadcast_interval_secs);
+        Default::getConfiguredOrMinimumValue(15, default_broadcast_interval_secs);
     uint32_t maxSearchMs = Default::getConfiguredOrDefaultMs(minimumOrConfiguredSecs, default_broadcast_interval_secs);
 
     // If we've been searching longer than our position broadcast interval: that's too long

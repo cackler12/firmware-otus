@@ -1529,7 +1529,8 @@ void GPS::down()
         scheduling.informSearchFailed();
     uint32_t predictedSearchDuration = scheduling.predictedSearchDurationMs();
     uint32_t sleepTime = scheduling.msUntilNextSearch();
-    uint32_t updateInterval = Default::getConfiguredOrDefaultMs(config.position.gps_update_interval);
+    // Hardcoded to 1 second update rate for GPS
+    uint32_t updateInterval = Default::getConfiguredOrDefaultMs(1);
 
     LOG_DEBUG("%us until next search", sleepTime / 1000);
 
@@ -1694,7 +1695,8 @@ int32_t GPS::runOnce()
 
     if (powerState == GPS_ACTIVE) {
         // if gps_update_interval is <=10s, GPS never goes off, so we treat that differently
-        uint32_t updateInterval = Default::getConfiguredOrDefaultMs(config.position.gps_update_interval);
+        // Hardcoded to 1 second update rate for GPS
+        uint32_t updateInterval = Default::getConfiguredOrDefaultMs(1);
 
         // 1. Got a time for the first time this cycle
         if (!gotTime && lookForTime()) { // Note: we count on this && short-circuiting and not resetting the RTC time
