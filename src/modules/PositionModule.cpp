@@ -548,7 +548,8 @@ int32_t PositionModule::runOnce()
 {
     if (sleepOnNextExecution == true) {
         sleepOnNextExecution = false;
-        uint32_t nightyNightMs = Default::getConfiguredOrDefaultMs(config.position.position_broadcast_secs);
+        // Hardcoded the position broadcast interval to 10 seconds
+        uint32_t nightyNightMs = Default::getConfiguredOrDefaultMs(10);
         LOG_DEBUG("Sleep %ims, then wake to send position", nightyNightMs);
         doDeepSleep(nightyNightMs, false, false);
     }
@@ -571,8 +572,9 @@ int32_t PositionModule::runOnce()
     }
 
     // We limit our GPS broadcasts to a max rate
+    // Hardcoded the position broadcast interval to 10 seconds
     uint32_t intervalMs = Default::getConfiguredOrDefaultMsScaled(
-        config.position.position_broadcast_secs, default_broadcast_interval_secs, numOnlineNodes, TrafficType::POSITION);
+        10, default_broadcast_interval_secs, numOnlineNodes, TrafficType::POSITION);
     uint32_t msSinceLastSend = now - lastGpsSend;
     // Only send packets if the channel util. is less than 25% utilized or we're a tracker with less than 40% utilized.
     if (!airTime->isTxAllowedChannelUtil(config.device.role != meshtastic_Config_DeviceConfig_Role_TRACKER &&

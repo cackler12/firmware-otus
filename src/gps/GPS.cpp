@@ -1694,7 +1694,8 @@ int32_t GPS::runOnce()
 
     if (powerState == GPS_ACTIVE) {
         // if gps_update_interval is <=10s, GPS never goes off, so we treat that differently
-        uint32_t updateInterval = Default::getConfiguredOrDefaultMs(config.position.gps_update_interval);
+        // Hardcoded the GPS update interval to be every second
+        uint32_t updateInterval = Default::getConfiguredOrDefaultMs(1000);
 
         // 1. Got a time for the first time this cycle
         if (!gotTime && lookForTime()) { // Note: we count on this && short-circuiting and not resetting the RTC time

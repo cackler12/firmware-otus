@@ -109,7 +109,8 @@ class PositionModule : public ProtobufModule<meshtastic_Position>, private concu
         max(uint32_t(300000), Default::getConfiguredOrDefaultMs(config.position.broadcast_smart_minimum_interval_secs,
                                                                 default_broadcast_smart_minimum_interval_secs));
 #else
-    const uint32_t minimumTimeThreshold = Default::getConfiguredOrDefaultMs(config.position.broadcast_smart_minimum_interval_secs,
+    // Hardcoded the minimum smart interval to be 2 seconds
+    const uint32_t minimumTimeThreshold = Default::getConfiguredOrDefaultMs(2,
                                                                             default_broadcast_smart_minimum_interval_secs);
 #endif
 };

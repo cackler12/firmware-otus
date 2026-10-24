@@ -86,7 +86,8 @@ uint32_t GPSUpdateScheduling::msUntilNextSearch()
     uint32_t now = Time::getMillis();
 
     // Target interval (seconds), between GPS updates
-    uint32_t updateInterval = Default::getConfiguredOrDefaultMs(config.position.gps_update_interval, default_gps_update_interval);
+    // Hardcoded the GPS update interval to be every second
+    uint32_t updateInterval = Default::getConfiguredOrDefaultMs(1000, default_gps_update_interval);
 
     // After a failed search, back off: indoors / no-sky environments will keep failing,
     // so wake at most once per broadcast interval rather than once per gps_update_interval.
